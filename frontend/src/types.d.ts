@@ -1,5 +1,6 @@
 export interface RegisterMutation {
-  username: string;
+  email: string;
+  phoneNumber: string;
   password: string;
   displayName: string;
   avatar: File | null;
@@ -7,9 +8,10 @@ export interface RegisterMutation {
 
 export interface User {
   _id: string;
-  username: string;
+  email: string;
   token: string;
   displayName: string;
+  phoneNumber: string;
   role: string;
   avatar: string;
 }
@@ -36,6 +38,6 @@ export interface GlobalError {
 }
 
 export interface LoginMutation {
-  username: string;
+  email: string;
   password: string;
 }

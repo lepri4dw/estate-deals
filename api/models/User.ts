@@ -13,18 +13,55 @@ interface IUserMethods {
 type UserModel = Model<IUser, {}, IUserMethods>;
 
 const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
-  username: {
+  email: {
     type: String,
     required: true,
     unique: true,
     validate: {
-      validator: async function (this: HydratedDocument<IUser>, username: string): Promise<boolean> {
-        if (!this.isModified('username')) return true;
-        const user: HydratedDocument<IUser> | null = await User.findOne({username: username});
+      validator: async function (this: HydratedDocument<IUser>, email: string): Promise<boolean> {
+        if (!this.isModified('email')) return true;
+        const user: HydratedDocument<IUser> | null = await User.findOne({email});
         return !Boolean(user);
       },
       message: 'This user is already registered'
     }
+  },
+  phoneNumber: {
+    type: String,
+    validate: [
+      {
+        validator: async function (
+          this: HydratedDocument<IUser>,
+          phoneNumber: string,
+        ): Promise<boolean> {
+          if (!phoneNumber) {
+            return true;
+          }
+
+          if (!this.isModified('phoneNumber')) {
+            return true;
+          }
+
+          const user = await User.findOne({
+            phoneNumber,
+          });
+
+          return !user;
+        },
+        message: 'Пользователь с таким номером телефона уже зарегистрирован!',
+      },
+      {
+        validator: function (phoneNumber: string): boolean {
+          if (!phoneNumber) {
+            return true;
+          }
+
+          const regex = /^\+996\d{9}$/;
+          return regex.test(phoneNumber);
+        },
+        message: 'Неверный формат номера телефона!',
+      },
+    ],
   },
   displayName: {
     type: String,

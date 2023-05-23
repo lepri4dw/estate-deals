@@ -17,7 +17,8 @@ const Register = () => {
   const loading = useAppSelector(selectRegisterLoading);
 
   const [state, setState] = useState<RegisterMutation>({
-    username: '',
+    email: '',
+    phoneNumber: '',
     password: '',
     displayName: '',
     avatar: null
@@ -42,6 +43,8 @@ const Register = () => {
       // error happened
     }
   };
+
+  const phoneNumberPattern = '^+996\\d{9}$';
 
   const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, files} = e.target;
@@ -86,17 +89,17 @@ const Register = () => {
             }}
           />
         </Box>
-        <Box component="form" noValidate onSubmit={submitFormHandler} sx={{mt: 3}}>
+        <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3}}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 label="Email"
-                name="username"
-                autoComplete="new-username"
-                value={state.username} required
+                name="email"
+                autoComplete="new-email"
+                value={state.email} required
                 onChange={inputChangeHandler}
-                error={Boolean(getFieldError('username'))}
-                helperText={getFieldError('username')}
+                error={Boolean(getFieldError('email'))}
+                helperText={getFieldError('email')}
               />
             </Grid>
             <Grid item xs={12}>
@@ -108,6 +111,21 @@ const Register = () => {
                 onChange={inputChangeHandler}
                 error={Boolean(getFieldError('displayName'))}
                 helperText={getFieldError('displayName')}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                label="Phone Number +996 ХХХ ХХХ ХХХ"
+                name="phoneNumber"
+                autoComplete="new-phoneNumber"
+                value={state.phoneNumber}
+                onChange={inputChangeHandler}
+                error={Boolean(getFieldError('phoneNumber'))}
+                helperText={getFieldError('phoneNumber')}
+                inputProps={{ pattern: phoneNumberPattern }}
+                type="tel"
+                sx={{ width: '100%' }}
               />
             </Grid>
             <Grid item xs={12}>
