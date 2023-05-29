@@ -4,6 +4,10 @@ import path from 'path';
 import { randomUUID } from 'crypto';
 import config from './config';
 
+export interface UploadedFile extends Express.Multer.File {
+  filename: string;
+}
+
 const imageStorage = multer.diskStorage({
   destination: async (_req, _file, cb) => {
     const destDir = path.join(config.publicPath, 'images');
