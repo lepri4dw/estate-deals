@@ -80,10 +80,9 @@ estateRouter.post('/', auth, imagesUpload.array('images', 10), async (req, res, 
       condition: req.body.condition,
       town: req.body.town,
       images,
-      district: req.body.district,
       description: req.body.description,
       dealType: req.body.dealType,
-      landArea: req.body.landArea,
+      landArea: parseInt(req.body.landArea) || null,
       estateType: req.body.estateType,
       address: req.body.address,
     });
@@ -121,10 +120,9 @@ estateRouter.put('/:id', auth, imagesUpload.array('images', 10), async (req, res
     estate.square = parseFloat(req.body.square) || req.body.square;
     estate.condition = req.body.condition;
     estate.town = req.body.town;
-    estate.district = req.body.district;
     estate.description = req.body.description;
     estate.dealType = req.body.dealType;
-    estate.landArea = req.body.landArea;
+    estate.landArea = parseInt(req.body.landArea) || req.body.landArea;
     estate.images = [...estate.images, ...images];
 
     await estate.save();

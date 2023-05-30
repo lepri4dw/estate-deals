@@ -31,7 +31,6 @@ const EstateSchema = new Schema<IEstate>({
   },
   town: String,
   images: [String],
-  district: String,
   address: String,
   estateType: {
     type: String,
@@ -45,9 +44,9 @@ const EstateSchema = new Schema<IEstate>({
   dealType: {
     type: String,
     required: true,
-    enum: ['Продам', 'Сдам'],
+    enum: ['sale', 'rent'],
   },
-  landArea: String,
+  landArea: Number,
   isPublished: {
     type: Boolean,
     required: true,

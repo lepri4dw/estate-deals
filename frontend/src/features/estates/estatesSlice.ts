@@ -15,7 +15,7 @@ interface EstateState {
   fetchLoading: boolean;
   oneEstate: Estate | null;
   fetchOneLoading: boolean;
-  createLoading: boolean;
+  submitting: boolean;
   error: ValidationError | null;
   deleteLoading: string | false;
   togglingIsPublished: boolean;
@@ -28,7 +28,7 @@ const initialState: EstateState = {
   fetchLoading: false,
   oneEstate: null,
   fetchOneLoading: false,
-  createLoading: false,
+  submitting: false,
   error: null,
   deleteLoading: false,
   togglingIsPublished: false,
@@ -67,26 +67,26 @@ const estatesSlice = createSlice({
       })
 
       .addCase(createEstate.pending, (state) => {
-        state.createLoading = true;
+        state.submitting = true;
         state.error = null;
       })
       .addCase(createEstate.fulfilled, (state) => {
-        state.createLoading = false;
+        state.submitting = false;
       })
       .addCase(createEstate.rejected, (state, {payload: error}) => {
-        state.createLoading = false;
+        state.submitting = false;
         state.error = error ||  null;
       })
 
       .addCase(updateEstate.pending, (state) => {
-        state.createLoading = true;
+        state.submitting = true;
         state.error = null;
       })
       .addCase(updateEstate.fulfilled, (state) => {
-        state.createLoading = false;
+        state.submitting = false;
       })
       .addCase(updateEstate.rejected, (state, {payload: error}) => {
-        state.createLoading = false;
+        state.submitting = false;
         state.error = error || null;
       })
 
@@ -119,8 +119,8 @@ export const selectEstatesFetching = (state: RootState) =>
 export const selectOneEstate = (state: RootState) => state.estates.oneEstate;
 export const selectOneEstateFetching = (state: RootState) =>
   state.estates.fetchOneLoading;
-export const selectEstateCreating = (state: RootState) =>
-  state.estates.createLoading;
+export const selectEstateSubmitting = (state: RootState) =>
+  state.estates.submitting;
 export const selectEstateError = (state: RootState) => state.estates.error;
 export const selectEstateDeleting = (state: RootState) =>
   state.estates.deleteLoading;

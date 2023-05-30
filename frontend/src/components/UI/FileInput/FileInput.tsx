@@ -12,15 +12,15 @@ interface Props {
 const FileInput: React.FC<Props> = ({onChange, name, label, error, helperText}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [filename, setFilename] = useState('');
+  const [filenames, setFilenames] = useState<string[]>([]);
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFilename(e.target.files[0].name);
+    if (e.target.files && e.target.files.length > 0) {
+      const newFilenames = Array.from(e.target.files).map((file) => file.name);
+      setFilenames(newFilenames);
     } else {
-      setFilename('');
+      setFilenames([]);
     }
-
     onChange(e);
   };
 
@@ -37,15 +37,19 @@ const FileInput: React.FC<Props> = ({onChange, name, label, error, helperText}) 
         type="file"
         name={name}
         onChange={onFileChange}
+        multiple
         ref={inputRef}
+        accept={'image/*'}
       />
       <Grid container direction="row" spacing={2} alignItems="center">
         <Grid item xs>
           <TextField
             disabled
             label={label}
-            value={filename}
-            onClick={activateInput} error={error} helperText={helperText}
+            value={filenames.join(', ')}
+            onClick={activateInput}
+            error={error}
+            helperText={helperText}
           />
         </Grid>
         <Grid item>

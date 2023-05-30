@@ -15,14 +15,13 @@ const Link = styled(NavLink)({
 
 const AppToolbar = () => {
   const user = useAppSelector(selectUser);
-  console.log(user);
 
   return (
     <AppBar position="sticky" sx={{mb: 2}}>
       <Toolbar>
         <Grid container justifyContent="space-between" alignItems="center">
           <Typography variant="h6" component="div">
-            <Link to="/">Name</Link>
+            <Link to="/">Estate Deals</Link>
           </Typography>
           <Grid item>
             {user ? <UserMenu user={user}/> : <AnonMenu/>}

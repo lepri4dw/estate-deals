@@ -35,10 +35,9 @@ export interface IEstate {
   condition: string;
   town: string;
   images: string[];
-  district: string;
   description: string;
   dealType: 'sale' | 'rent';
-  landArea: string;
+  landArea: number;
   createdAt: string;
   isPublished: boolean;
   address: string;

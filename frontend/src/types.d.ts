@@ -43,6 +43,7 @@ export interface LoginMutation {
 }
 
 export interface EstateShort {
+  _id: string;
   user: Types.ObjectId;
   usdPrice: number;
   kgsPrice: number;
@@ -53,14 +54,13 @@ export interface EstateShort {
   condition: string;
   town: string;
   images: string[];
-  district: string;
   description: string;
   dealType: 'sale' | 'rent';
-  landArea: string;
+  landArea: number;
   createdAt: string;
   isPublished: boolean;
   address: string;
-  estateType: 'Квартира' | 'Дом' | 'Гараж' | 'Участок' | 'Коммерческое помещение'
+  estateType: string;
 }
 
 export interface EstateMutation {
@@ -73,12 +73,11 @@ export interface EstateMutation {
   condition: string;
   town: string;
   images: File[] | null;
-  district: string;
   description: string;
-  dealType: 'sale' | 'rent';
+  dealType: string;
   landArea: string;
   address: string;
-  estateType: 'Квартира' | 'Дом' | 'Гараж' | 'Участок' | 'Коммерческое помещение'
+  estateType: string;
 }
 
 export interface Estate extends EstateShort {
