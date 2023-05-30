@@ -10,7 +10,7 @@ export interface PageLimit {
 }
 
 export type SearchParam = {
-  [field: string]: string | { $regex: string; $options?: string };
+  [field: string]: string | number;
 };
 
 export interface IUser {

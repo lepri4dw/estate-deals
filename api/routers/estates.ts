@@ -16,8 +16,9 @@ type QueryParams = SwitchToString<
     | 'condition'
     | 'numberOfRooms'
     | 'town'
-    | 'district'
-    | 'dealType'> & PageLimit
+    | 'dealType'
+    | 'estateType'
+    > & PageLimit
 > // price, floor
 
 estateRouter.get('/', async (req, res, next) => {
@@ -33,10 +34,12 @@ estateRouter.get('/', async (req, res, next) => {
         return acc;
       }, {});
 
+    console.log(searchParam);
+
     const totalCount = await Estate.count(searchParam);
     const skip = (p - 1) * l;
 
-    const estates = await Estate.find(searchParam, 'title duration image')
+    const estates = await Estate.find(searchParam)
       .skip(skip)
       .limit(l);
 
@@ -112,10 +115,10 @@ estateRouter.put('/:id', auth, imagesUpload.array('images', 10), async (req, res
 
     estate.usdPrice = req.body.usdPrice ? parseInt(req.body.usdPrice) : Math.floor(await kgsToUsd(parseFloat(req.body.kgsPrice)));
     estate.kgsPrice = req.body.kgsPrice ? parseInt(req.body.kgsPrice) : Math.floor(await usdToKgs(parseFloat(req.body.usdPrice)));
-    estate.floor = parseInt(req.body.floor);
-    estate.numberOfFloors = parseInt(req.body.numberOfFloors);
-    estate.numberOfRooms = parseInt(req.body.numberOfRooms);
-    estate.square = parseFloat(req.body.square);
+    estate.floor = parseInt(req.body.floor) || req.body.floor;
+    estate.numberOfFloors = parseInt(req.body.numberOfFloors) || req.body.numberOfFloors;
+    estate.numberOfRooms = parseInt(req.body.numberOfRooms) || req.body.numberOfRooms;
+    estate.square = parseFloat(req.body.square) || req.body.square;
     estate.condition = req.body.condition;
     estate.town = req.body.town;
     estate.district = req.body.district;

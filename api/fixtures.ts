@@ -62,14 +62,14 @@ const run = async () => {
     square: 105,
     condition: 'хорошее',
     town: 'Бишкек',
-    type: 'Квартира',
+    estateType: 'Квартира',
     address: 'ул. Панфилова 77/8',
     description: `В квартире выполнен ремонт из качественных материалов.
         Новая мебель, бытовая техника, встроенные шкафы, кухонныи‌ гарнитур, хрустальные люстры, кондиционеры…
         Дом сеи‌смоустои‌чивыи‌. и сдан в эксплуатацию,
         все коммуникации центральные.
         Зимои‌ жарко летом прохладно.`,
-    dealType: 'Продам',
+    dealType: 'sale',
     images: ['fixtures/appart-1.jpg','fixtures/appart-2.jpg','fixtures/appart-3.jpg','fixtures/appart-4.jpg','fixtures/appart-5.jpg', ]
   }, {
     user: user2._id,
@@ -81,12 +81,12 @@ const run = async () => {
     landArea: '5 соток',
     condition: 'среднее',
     town: 'Бишкек',
-    type: 'Дом',
+    estateType: 'Дом',
     address: 'ж/м Киргизия-1 ул. Абдрахманова 89',
     description: `Продаётся дом, центральная канализация, электричество 3х фазное, 
       отопление паровое( газ, электричество), в шаговой доступности западный автовокзал, супермаркет,
       рестораны, кафе, школа , дет. сад..`,
-    dealType: 'Продам',
+    dealType: 'sale',
     images: ['fixtures/house-1.jpg', 'fixtures/house-2.jpg', 'fixtures/house-3.jpg', 'fixtures/house-4.jpg', ]
   }, {
     user: user2._id,
@@ -98,12 +98,12 @@ const run = async () => {
     square: 110,
     condition: 'хорошее',
     town: 'Бишкек',
-    type: 'Квартира',
+    estateType: 'Квартира',
     address: 'Джал Исанова/Ахунбаева',
     description: `Абсолютно новая квартира в новом доме, ранее не сдавалась.
         Имеется вся бытовая техника: Утюг, Smart TV, стиральная машина, холодильник, микроволновая печь, пылесос.
         Из мебели: двухспальная кровать, 2 детской кровати, шкаф, кухонная гарнитура, диван, 2 гардероба.`,
-    dealType: 'Сдам',
+    dealType: 'rent',
     images: ['fixtures/appart2-1.jpg', 'fixtures/appart2-2.jpg', 'fixtures/appart2-3.jpg']
   });
 
