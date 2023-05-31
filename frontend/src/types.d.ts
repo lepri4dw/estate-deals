@@ -85,11 +85,11 @@ export interface Estate extends EstateShort {
 }
 
 export interface FromTo {
-  $gte?: number;
-  $lte?: number;
+  $gte?: string;
+  $lte?: string;
 }
 
-export type SearchEstate = Partial<Pick<EstateMutation, 'numberOfRooms' | 'town' | 'condition' | 'dealType' | 'estateType' | 'isPublished'> & {
+export type SearchEstate = Partial<Pick<EstateMutation, 'numberOfRooms' | 'condition' | 'dealType' | 'estateType'> & {
   usdPrice: FromTo;
   kgsPrice: FromTo;
   floor: FromTo;
