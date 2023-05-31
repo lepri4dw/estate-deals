@@ -59,6 +59,11 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
     setState((prev) => ({ ...prev, [name]: value }));
   };
 
+  const onTypeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setState((prev) => ({ ...prev, [name]: value, numberOfFloors: '', floor: '', numberOfRooms: '', square: '', condition: '', landArea: ''}));
+  }
+
   const onFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     setState((prev) => ({
@@ -70,7 +75,6 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await onSubmit(state);
-    console.log(state.images);
     setState(initialState);
   };
 
@@ -103,24 +107,11 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
 
         <Grid item xs>
           <TextField
-            id="town"
-            label="Населенный пункт"
-            value={state.town}
-            onChange={onChange}
-            name="town"
-            required
-            error={Boolean(getFieldError('town'))}
-            helperText={getFieldError('town')}
-          />
-        </Grid>
-
-        <Grid item xs>
-          <TextField
             id="estateType"
             label="Тип жилья"
             select
             value={state.estateType}
-            onChange={onChange}
+            onChange={onTypeChange}
             name="estateType"
             required
             error={Boolean(getFieldError('estateType'))}
@@ -135,6 +126,19 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
               </MenuItem>
             ))}
           </TextField>
+        </Grid>
+
+        <Grid item xs>
+          <TextField
+            id="town"
+            label="Населенный пункт"
+            value={state.town}
+            onChange={onChange}
+            name="town"
+            required
+            error={Boolean(getFieldError('town'))}
+            helperText={getFieldError('town')}
+          />
         </Grid>
 
         <Grid item xs container spacing={1}>
@@ -198,20 +202,20 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
           />
         </Grid>}
 
-        {state.estateType !== 'Гараж' && <Grid item xs>
+        {(state.estateType === 'Квартира' || state.estateType === 'Дом' || state.estateType === 'Коммерческое помещение' || state.estateType === '') && <Grid item xs>
           <TextField
             id="numberOfFloors"
             label="Всего этажей"
             value={state.numberOfFloors}
             onChange={onChange}
             name="numberOfFloors"
-            required type="number" inputProps={{step: 1, min: 1}}
+            required type="number" inputProps={{step: 1, min: state.floor ? parseInt(state.floor) : 1}}
             error={Boolean(getFieldError('numberOfFloors'))}
             helperText={getFieldError('numberOfFloors')}
           />
         </Grid>}
 
-        {state.estateType !== 'Гараж' && <Grid item xs>
+        {(state.estateType === 'Квартира' || state.estateType === 'Дом' || state.estateType === 'Коммерческое помещение' || state.estateType === '') && <Grid item xs>
           <TextField
             id="numberOfRooms"
             label="Количество комнат"
@@ -224,7 +228,7 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
           />
         </Grid>}
 
-        <Grid item xs>
+        {state.estateType !== 'Участок' && <Grid item xs>
           <TextField
             id="square"
             label={`Площадь м${'\u00B2'}`}
@@ -235,9 +239,9 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
             error={Boolean(getFieldError('square'))}
             helperText={getFieldError('square')}
           />
-        </Grid>
+        </Grid>}
 
-        <Grid item xs>
+        {state.estateType !== 'Участок' && <Grid item xs>
           <TextField
             id="condition"
             label="Состояние"
@@ -258,7 +262,7 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
+        </Grid>}
 
         <Grid item xs>
           <TextField
@@ -280,7 +284,7 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
             value={state.landArea}
             onChange={onChange}
             name="landArea"
-            required type="number" inputProps={{min: 0}}
+            required={state.estateType === 'Участок'} type="number" inputProps={{min: 0}}
             error={Boolean(getFieldError('landArea'))}
             helperText={getFieldError('landArea')}
           />
@@ -292,6 +296,7 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
             onChange={onFilesChange}
             name="images"
             error={Boolean(getFieldError('images'))}
+            helperText={getFieldError('images')}
           />
         </Grid>
 

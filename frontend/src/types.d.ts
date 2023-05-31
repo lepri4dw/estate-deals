@@ -89,7 +89,7 @@ export interface FromTo {
   $lte?: number;
 }
 
-export type SearchEstate = Partial<Pick<EstateMutation, 'numberOfRooms' | 'town' | 'condition' | 'dealType' | 'estateType'> & {
+export type SearchEstate = Partial<Pick<EstateMutation, 'numberOfRooms' | 'town' | 'condition' | 'dealType' | 'estateType' | 'isPublished'> & {
   usdPrice: FromTo;
   kgsPrice: FromTo;
   floor: FromTo;

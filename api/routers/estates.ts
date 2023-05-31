@@ -7,6 +7,7 @@ import {promises as fs} from "fs";
 import mongoose, {HydratedDocument} from "mongoose";
 import permit from "../middleware/permit";
 import {kgsToUsd, usdToKgs} from "../exhange-rates";
+import user from "../middleware/user";
 
 const estateRouter = express.Router();
 
@@ -21,8 +22,9 @@ type QueryParams = SwitchToString<
     > & PageLimit
 > // price, floor
 
-estateRouter.get('/', async (req, res, next) => {
+estateRouter.get('/', user, async (req, res, next) => {
   try {
+    const user = (req as RequestWithUser).user;
     const { page, limit, ...params }: QueryParams = req.query;
     const l: number = parseInt(limit as string) || 20;
     const p: number = parseInt(page as string) || 1;
@@ -34,8 +36,9 @@ estateRouter.get('/', async (req, res, next) => {
         return acc;
       }, {});
 
-    console.log(searchParam);
-
+    if (((user && user.role === 'user') || !user) && !searchParam.user) {
+      searchParam.isPublished = true;
+    }
     const totalCount = await Estate.count(searchParam);
     const skip = (p - 1) * l;
 
@@ -63,7 +66,7 @@ estateRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-estateRouter.post('/', auth, imagesUpload.array('images', 10), async (req, res, next) => {
+estateRouter.post('/', auth, imagesUpload.array('images', 50), async (req, res, next) => {
   try {
     const user = (req as RequestWithUser).user;
     const files = req.files as UploadedFile[];

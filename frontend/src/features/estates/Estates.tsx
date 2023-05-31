@@ -4,6 +4,7 @@ import {selectEstates, selectEstatesFetching} from "./estatesSlice";
 import {fetchEstates} from "./estatesThunks";
 import {CircularProgress, Grid, Typography} from "@mui/material";
 import EstateItem from "./components/EstateItem";
+import FilterForm from "./components/FilterForm";
 
 const Estates = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +16,10 @@ const Estates = () => {
   }, [dispatch]);
 
   return (
-    <Grid container direction="column" spacing={2}>
+    <Grid container direction="column" spacing={3}>
+      <Grid item>
+        <FilterForm/>
+      </Grid>
       <Grid item>
         <Typography variant="h4">
           Обьявления

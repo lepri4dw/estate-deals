@@ -1,4 +1,4 @@
-import {model, Schema, Types} from "mongoose";
+import {HydratedDocument, model, Schema, Types} from "mongoose";
 import User from "./User";
 import {IEstate} from "../types";
 
@@ -15,10 +15,22 @@ const EstateSchema = new Schema<IEstate>({
   usdPrice: {
     type: Number,
     min: 0,
+    validate: {
+      validator: function (this: HydratedDocument<IEstate>, price: number) {
+        return !(!this.kgsPrice && !price);
+      },
+      message: 'Введите цену в выбранной валюте!',
+    }
   },
   kgsPrice: {
     type: Number,
     min: 0,
+    validate: {
+      validator: function (this: HydratedDocument<IEstate>, price: number) {
+        return !(!this.usdPrice && !price);
+      },
+      message: 'Введите цену в выбранной валюте!',
+    }
   },
   floor: Number,
   numberOfFloors: Number,
@@ -26,12 +38,19 @@ const EstateSchema = new Schema<IEstate>({
   square: Number,
   condition: {
     type: String,
-    required: true,
-    enum: ['под самоотделку', 'хорошее', 'среднее', 'не достроено']
+    enum: ['под самоотделку', 'хорошее', 'среднее', 'не достроено', '']
   },
-  town: String,
-  images: [String],
-  address: String,
+  town: {type: String, required: true},
+  images: {
+  type: [String],
+    validate: {
+      validator: (images: string[]) => {
+        return images.length > 0;
+      },
+      message: 'Загрузите минимум одну фотографию!',
+    }
+  },
+  address: {type: String, required: true},
   estateType: {
     type: String,
     required: true,

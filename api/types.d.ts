@@ -10,7 +10,7 @@ export interface PageLimit {
 }
 
 export type SearchParam = {
-  [field: string]: string | number;
+  [field: string]: string | number | boolean;
 };
 
 export interface IUser {

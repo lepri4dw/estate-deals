@@ -17,14 +17,14 @@ const NewEstate = () => {
 
   return (
     <Container maxWidth="md">
-    <Grid container direction="column" spacing={2}>
-      <Grid item xs>
-        <Typography variant="h4">Создать объявление</Typography>
+      <Grid container direction="column" spacing={2}>
+        <Grid item xs>
+          <Typography variant="h4">Создать объявление</Typography>
+        </Grid>
+        <Grid item xs>
+            <EstateForm onSubmit={onSubmit}/>
+        </Grid>
       </Grid>
-      <Grid item xs>
-          <EstateForm onSubmit={onSubmit}/>
-      </Grid>
-    </Grid>
     </Container>
   );
 };

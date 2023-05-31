@@ -6,10 +6,17 @@ import Register from "./features/users/Register";
 import Login from "./features/users/Login";
 import Estates from "./features/estates/Estates";
 import NewEstate from "./features/estates/components/NewEstate";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import {useAppSelector} from "./app/hooks";
+import {selectUser} from "./features/users/usersSlice";
+import EditEstate from "./features/estates/components/EditEstate";
+import FullEstateItem from "./features/estates/components/FullEstateItem";
 
 function App() {
+  const user = useAppSelector(selectUser);
+
   return (
-    <>
+    <div style={{position: 'relative'}}>
       <CssBaseline/>
       <header>
         <AppToolbar/>
@@ -20,12 +27,14 @@ function App() {
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/" element={<Estates/>}/>
-            <Route path="/new-estate" element={<NewEstate/>}/>
+            <Route path="/new-estate" element={<ProtectedRoute isAllowed={Boolean(user)}><NewEstate/></ProtectedRoute>}/>
+            <Route path="/estates/:id" element={<FullEstateItem/>}/>
+            <Route path="/estates/edit/:id" element={<ProtectedRoute isAllowed={Boolean(user)}><EditEstate/></ProtectedRoute>}/>
             <Route path="/*" element={<h1>Not Found! This page does not exist!</h1>}/>
           </Routes>
         </Container>
       </main>
-    </>
+    </div>
   );
 }
 

@@ -5,7 +5,8 @@ import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import { logout } from '../../../features/users/usersThunks';
 import {selectLogoutLoading} from "../../../features/users/usersSlice";
 import {apiURL} from "../../../constants";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {fetchEstates} from "../../../features/estates/estatesThunks";
 
 interface Props {
   user: User;
@@ -13,6 +14,7 @@ interface Props {
 
 const UserMenu: React.FC<Props> = ({user}) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const logoutLoading = useAppSelector(selectLogoutLoading);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -23,8 +25,10 @@ const UserMenu: React.FC<Props> = ({user}) => {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    await dispatch(logout()).unwrap();
+    navigate('/');
+    dispatch(fetchEstates());
   };
 
   return (

@@ -70,6 +70,7 @@ const run = async () => {
         все коммуникации центральные.
         Зимои‌ жарко летом прохладно.`,
     dealType: 'sale',
+    isPublished: true,
     images: ['fixtures/appart-1.jpg','fixtures/appart-2.jpg','fixtures/appart-3.jpg','fixtures/appart-4.jpg','fixtures/appart-5.jpg', ]
   }, {
     user: user2._id,
@@ -78,7 +79,7 @@ const run = async () => {
     numberOfFloors: 1,
     numberOfRooms: 3,
     square: 76,
-    landArea: '5 соток',
+    landArea: 5,
     condition: 'среднее',
     town: 'Бишкек',
     estateType: 'Дом',
