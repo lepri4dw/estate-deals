@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useAppDispatch} from "../../../app/hooks";
 import {FromTo, SearchEstate} from "../../../types";
 import {
-  Button,
+  Button, Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -35,10 +35,24 @@ const FilterForm = () => {
   const estateTypes = ['Квартира', 'Дом', 'Гараж', 'Участок', 'Коммерческое помещение'];
   const conditions = ['под самоотделку', 'хорошее', 'среднее', 'не достроено'];
 
+
+  let priceLabel = 'цена ';
+
+  if (state.usdPrice) {
+    const gte = state.usdPrice.$gte ? `от ${state.usdPrice.$gte}` : '';
+    const lte = state.usdPrice.$lte ? `до ${state.usdPrice.$lte}` : '';
+    priceLabel += `${gte} ${lte} $`;
+  } else if (state.kgsPrice) {
+    const gte = state.kgsPrice.$gte ? `от ${state.kgsPrice.$gte}` : '';
+    const lte = state.kgsPrice.$lte ? `до ${state.kgsPrice.$lte}` : '';
+    priceLabel += `${gte} ${lte} сом`;
+  }
+
+
   const onCurrencyChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCurrency(e.target.value);
     setState(prev => ({
-      ...prev, usdPrice: {$lte: '', $gte: ''}, kgsPrice: {$lte: '', $gte: ''}
+      ...prev, usdPrice: undefined, kgsPrice: undefined
     }))
   };
 
@@ -72,9 +86,21 @@ const FilterForm = () => {
     setState(prev => filterState<SearchEstate>(prev));
   };
 
+  const onDelete = (name: string) => {
+    setState((prev) => ({...prev, [name]: undefined,}));
+    setState(prev => filterState<SearchEstate>(prev));
+  }
+
   const onTypeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setState((prev) => ({ ...prev, [name]: value, numberOfRooms: ''}));
+    setState(prev => filterState<SearchEstate>(prev));
+  }
+
+  const cleanFilters = () => {
+    setState((prev) => ({
+      ...prev, usdPrice: undefined, kgsPrice: undefined, floor: undefined, condition: undefined,
+    }));
     setState(prev => filterState<SearchEstate>(prev));
   }
 
@@ -141,6 +167,33 @@ const FilterForm = () => {
           </Grid>
         </Grid>
       </form>
+
+      <Grid container spacing={2} mt={1}>
+        {(state.usdPrice || state.kgsPrice) && <Grid item>
+          <Chip
+            label={priceLabel}
+            onDelete={() => onDelete(state.usdPrice ? 'usdPrice' : 'kgsPrice')}
+          />
+        </Grid>}
+        {(state.floor) && <Grid item>
+          <Chip
+            label={`Этаж ${state.floor.$gte ? `от ${state.floor.$gte}` : ''} ${state.floor.$lte ? `до ${state.floor.$lte}` : ''}`}
+            onDelete={() => onDelete('floor')}
+          />
+        </Grid>}
+        {(state.condition) && <Grid item>
+          <Chip
+            label={`Состояние: ${state.condition || ''}`}
+            onDelete={() => onDelete('floor')}
+          />
+        </Grid>}
+        {(state.usdPrice || state.kgsPrice || state.floor || state.condition) && <Grid item xs>
+          <Button variant="contained" onClick={cleanFilters}>
+            Очистить
+          </Button>
+        </Grid>}
+      </Grid>
+
       <Dialog
         open={open}
         onClose={handleClose}
@@ -169,7 +222,7 @@ const FilterForm = () => {
                     label="От"
                     value={currency === 'USD' ? state.usdPrice?.$gte : state.kgsPrice?.$gte}
                     onChange={(e) => onFromToInputChange(e, currency === 'USD' ? 'usdPrice' : 'kgsPrice')}
-                    name="$gte"
+                    name="$gte" type="number"
                     required
                   />
                 </Grid>
@@ -179,7 +232,7 @@ const FilterForm = () => {
                     label="До"
                     value={currency === 'USD' ? state.usdPrice?.$lte : state.kgsPrice?.$lte}
                     onChange={(e) => onFromToInputChange(e, currency === 'USD' ? 'usdPrice' : 'kgsPrice')}
-                    name="$lte"
+                    name="$lte" type="number"
                     required
                   />
                 </Grid>
@@ -215,7 +268,7 @@ const FilterForm = () => {
                     label="От"
                     value={state.floor?.$gte}
                     onChange={(e) => onFromToInputChange(e, 'floor')}
-                    name="$gte"
+                    name="$gte" type="number" inputProps={{step: 1, min: -1}}
                     required
                   />
                 </Grid>
@@ -225,7 +278,7 @@ const FilterForm = () => {
                     label="До"
                     value={state.floor?.$lte}
                     onChange={(e) => onFromToInputChange(e, 'floor')}
-                    name="$lte"
+                    name="$lte" type="number" inputProps={{step: 1, min: -1}}
                     required
                   />
                 </Grid>

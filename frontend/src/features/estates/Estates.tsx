@@ -22,7 +22,7 @@ const Estates = () => {
       </Grid>
       <Grid item>
         <Typography variant="h4">
-          Обьявления
+          Объявления
         </Typography>
       </Grid>
       {loading ? <CircularProgress/> : <Grid item container spacing={2}>

@@ -149,7 +149,7 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
               value={currency === 'USD' ? state.usdPrice : state.kgsPrice}
               onChange={onChange}
               name={currency === 'USD' ? 'usdPrice' : 'kgsPrice'}
-              required
+              required type="number"
               error={Boolean(getFieldError(currency === 'USD' ? 'usdPrice' : 'kgsPrice'))}
               helperText={getFieldError(currency === 'USD' ? 'usdPrice' : 'kgsPrice')}
             />
