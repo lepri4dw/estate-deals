@@ -75,7 +75,7 @@ const Register = () => {
           <LockOutlinedIcon/>
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Регистрация
         </Typography>
         <Box sx={{ pt: 2 }}>
           <GoogleLogin
@@ -106,7 +106,7 @@ const Register = () => {
               <TextField
                 required
                 name="displayName"
-                label="Display Name"
+                label="Имя"
                 value={state.displayName}
                 onChange={inputChangeHandler}
                 error={Boolean(getFieldError('displayName'))}
@@ -116,7 +116,7 @@ const Register = () => {
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
-                label="Phone Number +996 ХХХ ХХХ ХХХ"
+                label="Номер телефона +996 ХХХ ХХХ ХХХ"
                 name="phoneNumber"
                 autoComplete="new-phoneNumber"
                 value={state.phoneNumber}
@@ -131,7 +131,7 @@ const Register = () => {
             <Grid item xs={12}>
               <TextField
                 name="password"
-                label="Password"
+                label="Пароль"
                 type="password"
                 autoComplete="new-password"
                 value={state.password} required
@@ -142,7 +142,7 @@ const Register = () => {
             </Grid>
           </Grid>
           <Grid item xs={12} sx={{mt: 2}}>
-            <FileInput onChange={fileInputChangeHandler} name="avatar" label="Avatar"
+            <FileInput onChange={fileInputChangeHandler} name="avatar" label="Выберите картинку профиля"
                        error={Boolean(getFieldError('avatar'))} helperText={getFieldError('avatar')}/>
           </Grid>
           <LoadingButton
@@ -153,12 +153,12 @@ const Register = () => {
             loading={loading}
             loadingIndicator="Loading…"
           >
-            Sign Up
+            Завершить регистрацию
           </LoadingButton>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link component={RouterLink} to="/login" variant="body2">
-                Already have an account? Sign in
+                Войти используя email и пароль
               </Link>
             </Grid>
           </Grid>

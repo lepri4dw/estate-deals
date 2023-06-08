@@ -50,7 +50,7 @@ const Login = () => {
           <LockOpenIcon/>
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Войти
         </Typography>
         <Box sx={{ pt: 2 }}>
           <GoogleLogin
@@ -82,7 +82,7 @@ const Login = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="Password"
+                label="Пароль"
                 name="password"
                 type="password" required
                 autoComplete="current-password"
@@ -99,12 +99,12 @@ const Login = () => {
             loading={loading}
             loadingIndicator="Loading…"
           >
-            Sign In
+            Войти
           </LoadingButton>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link component={RouterLink} to="/register" variant="body2">
-                Or sign up
+                Или зарегистрироваться
               </Link>
             </Grid>
           </Grid>

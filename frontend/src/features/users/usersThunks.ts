@@ -70,3 +70,18 @@ export const logout = createAsyncThunk<void, void, {state: RootState}>(
     dispatch(unsetUser());
   }
 );
+
+export const addPhone = createAsyncThunk<User, string, { rejectValue: ValidationError }>(
+  'user/add-phone',
+  async (phoneNumber, {rejectWithValue}) => {
+    try {
+      const response = await axiosApi.patch('/users/add-phone', {phoneNumber});
+      return response.data;
+    } catch (e) {
+      if (isAxiosError(e) && e.response && e.response.status === 400) {
+        return rejectWithValue(e.response.data as ValidationError);
+      }
+      throw e;
+    }
+  }
+)

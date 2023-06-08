@@ -8,6 +8,7 @@ import fetch from 'node-fetch';
 import path from "path";
 import {imagesUpload} from "../multer";
 import User from "../models/User";
+import auth, {RequestWithUser} from "../middleware/auth";
 
 const usersRouter = express.Router();
 const client = new OAuth2Client(config.google.clientId);
@@ -145,6 +146,27 @@ usersRouter.delete('/sessions', async (req, res, next) => {
     await user.save();
     return res.send(success);
   } catch (e) {
+    return next(e);
+  }
+});
+
+usersRouter.patch('/add-phone', auth, async (req, res, next) => {
+  try {
+    const user = (req as RequestWithUser).user;
+
+    if (!req.body.phoneNumber) {
+      return res.status(400).send({error: 'Поле телефон является обязательным!'});
+    }
+
+    user.phoneNumber = req.body.phoneNumber;
+
+    await user.save();
+    return res.send(user);
+  } catch (e) {
+    if (e instanceof mongoose.Error.ValidationError) {
+      return res.status(400).send(e);
+    }
+
     return next(e);
   }
 });

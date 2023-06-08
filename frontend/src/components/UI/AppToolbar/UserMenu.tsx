@@ -37,7 +37,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
         onClick={handleClick}
         color="inherit"
       >
-        {user.displayName} <Avatar sx={{ml: 2}} src={apiURL + '/' + user.avatar} alt={user.email}/>
+        {user.displayName} <Avatar sx={{ml: 2}} src={apiURL + '/' + user.avatar} alt={user.displayName}/>
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -46,7 +46,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
         onClose={handleClose}
       >
         <MenuItem component={Link} to="/new-estate">Разместить объявление</MenuItem>
-        <MenuItem>My account</MenuItem>
+        <MenuItem component={Link} to="/profile">Мой профиль</MenuItem>
         <MenuItem onClick={handleLogout} disabled={logoutLoading}>{logoutLoading && <CircularProgress size={20} sx={{mr: 1}}/>}Выйти</MenuItem>
       </Menu>
     </>

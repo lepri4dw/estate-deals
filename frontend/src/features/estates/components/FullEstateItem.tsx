@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {
@@ -14,17 +14,25 @@ import Carousel from 'react-material-ui-carousel';
 import {apiURL} from "../../../constants";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {LoadingButton} from "@mui/lab";
-
+import ImageModal from "../../../components/UI/ImageModal/ImageModal";
 
 const FullEstateItem = () => {
   const dispatch = useAppDispatch();
   const id = (useParams()).id as string;
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const estate = useAppSelector(selectOneEstate);
   const loading = useAppSelector(selectOneEstateFetching);
   const deleteLoading = useAppSelector(selectEstateDeleting);
   const publishedLoading = useAppSelector(selectEstateTogglingPublished);
   const user = useAppSelector(selectUser);
+  const [selectedImage, setSelectedImage] = useState<string>('');
+
+  const handleOpen = (image: string) => {
+    setSelectedImage(apiURL + '/' + image);
+    setOpen(true);
+  }
+  const handleClose = () => setOpen(false);
 
   const handleDelete = async () => {
     if (window.confirm('Подтвердите удаление этого объявления')) {
@@ -67,12 +75,12 @@ const FullEstateItem = () => {
           </Card>
         </Grid>
        <Grid container spacing={2} item xs>
-          <Grid item xs={6} direction="column">
+          <Grid item xs={6}>
             <Typography variant="h3" mb={2}> {`${estate.numberOfRooms ? (estate.numberOfRooms + '-комн.') : ''} ${estate.estateType === 'Квартира' ? 'кв.' : estate.estateType}${estate.square ? (', ' + estate.square + `м${'\u00B2'}`) : ''} `}</Typography>
             <Grid spacing={2} container mb={2}>
               <Grid item>
                 <Typography variant="h4">
-                  Цена: {estate.usdPrice} $
+                  Цена: {estate.usdPrice.toLocaleString()} $
                 </Typography>
               </Grid>
               <Grid item>
@@ -127,13 +135,14 @@ const FullEstateItem = () => {
           <Grid item xs={6}>
             <Carousel animation="slide" autoPlay={false}>
               {estate.images.map(image => (
-                <img src={apiURL + '/' + image} alt={estate?.address} style={{width: '100%', height: '313px'}}/>
+                  <img key={image} src={apiURL + '/' + image} alt={estate?.address} style={{width: '100%', height: '313px'}} onClick={() => handleOpen(image)}/>
               ))}
             </Carousel>
             <Typography variant="h6"><strong>Описание от продавца: </strong>{estate.description}</Typography>
           </Grid>
         </Grid>
       </Grid>}
+      <ImageModal open={open} handleClose={handleClose} title={estate ? estate.address : ''} image={selectedImage}/>
     </Container>
   );
 };

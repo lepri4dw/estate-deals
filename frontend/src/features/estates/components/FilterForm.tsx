@@ -285,7 +285,7 @@ const FilterForm = () => {
               </Grid>
 
               <Grid item xs container spacing={2}>
-                <Grid item xs >
+                <Grid item xs>
                   <Typography variant="h6" mb={2}>
                     Состояние:
                   </Typography>

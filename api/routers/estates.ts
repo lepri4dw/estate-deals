@@ -20,7 +20,7 @@ type QueryParams = SwitchToString<
     | 'dealType'
     | 'estateType'
     > & PageLimit
-> // price, floor
+>
 
 estateRouter.get('/', user, async (req, res, next) => {
   try {

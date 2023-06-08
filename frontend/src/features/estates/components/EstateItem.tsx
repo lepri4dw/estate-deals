@@ -26,7 +26,7 @@ const EstateItem: React.FC<Props> = ({estate}) => {
           <Grid container item spacing={2}>
             <Grid item>
               <Typography variant="h5">
-                {estate.usdPrice} $
+                {estate.usdPrice.toLocaleString()} $
               </Typography>
             </Grid>
             <Grid item>

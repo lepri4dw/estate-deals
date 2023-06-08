@@ -23,7 +23,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
         const user: HydratedDocument<IUser> | null = await User.findOne({email});
         return !Boolean(user);
       },
-      message: 'This user is already registered'
+      message: 'Пользователь с таким email уже зарегистрирован!'
     }
   },
   phoneNumber: {
