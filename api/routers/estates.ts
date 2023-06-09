@@ -26,7 +26,7 @@ estateRouter.get('/', user, async (req, res, next) => {
   try {
     const user = (req as RequestWithUser).user;
     const { page, limit, ...params }: QueryParams = req.query;
-    const l: number = parseInt(limit as string) || 20;
+    const l: number = parseInt(limit as string) || 21;
     const p: number = parseInt(page as string) || 1;
 
     const searchParam = Object.entries(params)
@@ -44,7 +44,8 @@ estateRouter.get('/', user, async (req, res, next) => {
 
     const estates = await Estate.find(searchParam)
       .skip(skip)
-      .limit(l);
+      .limit(l)
+      .sort({isPublished: 1});
 
     return res.send({estates, currentPage: p, totalCount});
   } catch (e) {

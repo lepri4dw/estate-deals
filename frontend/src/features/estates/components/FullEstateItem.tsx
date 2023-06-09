@@ -15,6 +15,7 @@ import {apiURL} from "../../../constants";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {LoadingButton} from "@mui/lab";
 import ImageModal from "../../../components/UI/ImageModal/ImageModal";
+import dayjs from "dayjs";
 
 const FullEstateItem = () => {
   const dispatch = useAppDispatch();
@@ -53,6 +54,9 @@ const FullEstateItem = () => {
   return (
     <Container maxWidth="md">
       {loading ? <CircularProgress/> : estate && <Grid mt={3} container spacing={3} direction="column">
+        <Grid item>
+          <Typography variant="h6" color="text.secondary">Опубликовано {dayjs(estate.createdAt).format('DD.MM.YYYY')}</Typography>
+        </Grid>
         <Grid item xs>
           <Card style={{ width: '100%', padding: '16px' }}>
               <Grid container spacing={2} justifyContent="space-between" alignItems="center">

@@ -184,7 +184,7 @@ const FilterForm = () => {
         {(state.condition) && <Grid item>
           <Chip
             label={`Состояние: ${state.condition || ''}`}
-            onDelete={() => onDelete('floor')}
+            onDelete={() => onDelete('condition')}
           />
         </Grid>}
         {(state.usdPrice || state.kgsPrice || state.floor || state.condition) && <Grid item xs>

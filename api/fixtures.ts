@@ -106,7 +106,7 @@ const run = async () => {
         Из мебели: двухспальная кровать, 2 детской кровати, шкаф, кухонная гарнитура, диван, 2 гардероба.`,
     dealType: 'rent',
     images: ['fixtures/appart2-1.jpg', 'fixtures/appart2-2.jpg', 'fixtures/appart2-3.jpg']
-  });
+  }, );
 
   await db.close();
 }
