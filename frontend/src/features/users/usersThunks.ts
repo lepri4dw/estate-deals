@@ -5,7 +5,7 @@ import { isAxiosError } from 'axios';
 import { RootState } from '../../app/store';
 import { unsetUser } from './usersSlice';
 
-export const register = createAsyncThunk<User, RegisterMutation, {rejectValue: ValidationError}>(
+export const register = createAsyncThunk<void, RegisterMutation, {rejectValue: ValidationError}>(
   'users/register',
   async (registerMutation, {rejectWithValue}) => {
     try {
@@ -18,8 +18,7 @@ export const register = createAsyncThunk<User, RegisterMutation, {rejectValue: V
           formData.append(key, value);
         }
       });
-      const response = await axiosApi.post<User>('/users', formData);
-      return response.data;
+      await axiosApi.post('/users', formData);
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 400) {
         return rejectWithValue(e.response.data as ValidationError);
@@ -84,4 +83,14 @@ export const addPhone = createAsyncThunk<User, string, { rejectValue: Validation
       throw e;
     }
   }
-)
+);
+
+export const verifyEmail = createAsyncThunk<User, string>(
+  'users/verifyEmail',
+  async (token) => {
+    const response = await axiosApi.post<RegisterResponse>(
+      `/users/verify-email/${token}`,
+    );
+    return response.data.user;
+  },
+);

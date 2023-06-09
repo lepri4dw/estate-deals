@@ -14,6 +14,7 @@ export interface User {
   phoneNumber: string;
   role: string;
   avatar: string;
+  verified: boolean;
 }
 
 export interface RegisterResponse {

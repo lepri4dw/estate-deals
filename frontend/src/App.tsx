@@ -13,6 +13,7 @@ import EditEstate from "./features/estates/components/EditEstate";
 import FullEstateItem from "./features/estates/components/FullEstateItem";
 import Profile from "./features/users/components/Profile";
 import AddPhone from "./features/users/components/AddPhone";
+import VerifyEmail from "./features/users/components/VerifyEmail";
 
 function App() {
   const user = useAppSelector(selectUser);
@@ -28,6 +29,7 @@ function App() {
           <Routes>
             <Route path="/profile" element={<ProtectedRoute isAllowed={Boolean(user)}><Profile/></ProtectedRoute>}/>
             <Route path="/register" element={<Register/>}/>
+            <Route path="/verify-email/:token" element={<VerifyEmail/>}/>
             <Route path="/add-phone" element={<ProtectedRoute isAllowed={Boolean(user)}><AddPhone/></ProtectedRoute>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/" element={<Estates/>}/>

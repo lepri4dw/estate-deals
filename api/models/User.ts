@@ -2,6 +2,7 @@ import {HydratedDocument, Model, model, Schema} from "mongoose";
 import {IUser} from "../types";
 import bcrypt from "bcrypt";
 import {randomUUID} from "crypto";
+import validate from "deep-email-validator";
 
 const SALT_WORK_FACTOR = 10;
 
@@ -17,14 +18,28 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
     type: String,
     required: true,
     unique: true,
-    validate: {
+    validate: [{
       validator: async function (this: HydratedDocument<IUser>, email: string): Promise<boolean> {
         if (!this.isModified('email')) return true;
         const user: HydratedDocument<IUser> | null = await User.findOne({email});
         return !Boolean(user);
       },
       message: 'Пользователь с таким email уже зарегистрирован!'
-    }
+    },
+      {
+        validator: async function (
+          this: HydratedDocument<IUser>,
+          email: string,
+        ): Promise<boolean> {
+          try {
+            const { valid } = await validate(email);
+            return valid;
+          } catch {
+            return false;
+          }
+        },
+        message: 'Некорректный адрес электронной почты',
+      },]
   },
   phoneNumber: {
     type: String,
@@ -85,6 +100,14 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
     type: String,
   },
   googleId: String,
+  verifyEmailToken: {
+    type: String,
+    default: null,
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 UserSchema.pre('save', async function(next) {

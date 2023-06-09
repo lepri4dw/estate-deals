@@ -22,6 +22,8 @@ export interface IUser {
   role: string;
   avatar: string;
   googleId?: string;
+  verifyEmailToken: string | null;
+  verified: boolean;
 }
 
 export interface IEstate {

@@ -1,11 +1,12 @@
 import { GlobalError, User, ValidationError } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import {addPhone, googleLogin, login, logout, register} from './usersThunks';
+import {addPhone, googleLogin, login, logout, register, verifyEmail} from './usersThunks';
 
 interface UsersState {
   user: User | null;
   registerLoading: boolean;
+  verifyEmailLoading: boolean,
   registerError: ValidationError | null;
   loginLoading: boolean;
   loginError: GlobalError | null;
@@ -15,6 +16,7 @@ interface UsersState {
 const initialState: UsersState = {
   user: null,
   registerLoading: false,
+  verifyEmailLoading: false,
   registerError: null,
   loginLoading: false,
   loginError: null,
@@ -34,13 +36,23 @@ export const usersSlice = createSlice({
       state.registerError = null;
       state.registerLoading = true;
     });
-    builder.addCase(register.fulfilled, (state, {payload: user}) => {
+    builder.addCase(register.fulfilled, (state) => {
       state.registerLoading = false;
-      state.user = user;
     });
     builder.addCase(register.rejected, (state, {payload: error}) => {
       state.registerLoading = false;
       state.registerError = error || null;
+    });
+
+    builder.addCase(verifyEmail.pending, (state) => {
+      state.verifyEmailLoading = true;
+    });
+    builder.addCase(verifyEmail.fulfilled, (state, { payload: user }) => {
+      state.verifyEmailLoading = false;
+      state.user = user;
+    });
+    builder.addCase(verifyEmail.rejected, (state) => {
+      state.verifyEmailLoading = false;
     });
 
     builder.addCase(login.pending, (state) => {
@@ -100,6 +112,7 @@ export const {unsetUser} = usersSlice.actions;
 export const selectUser = (state: RootState) => state.users.user;
 export const selectRegisterLoading = (state: RootState) => state.users.registerLoading;
 export const selectRegisterError = (state: RootState) => state.users.registerError;
+export const selectVerifyEmailLoading = (state: RootState) => state.users.verifyEmailLoading;
 export const selectLoginLoading = (state: RootState) => state.users.loginLoading;
 export const selectLoginError = (state: RootState) => state.users.loginError;
 export const selectLogoutLoading = (state: RootState) => state.users.logoutLoading;

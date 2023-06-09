@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {RegisterMutation} from '../../types';
-import {Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/material';
+import {Alert, Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {selectRegisterError, selectRegisterLoading} from './usersSlice';
@@ -15,7 +15,6 @@ const Register = () => {
   const error = useAppSelector(selectRegisterError);
   const navigate = useNavigate();
   const loading = useAppSelector(selectRegisterLoading);
-
   const [state, setState] = useState<RegisterMutation>({
     email: '',
     phoneNumber: '',
@@ -23,6 +22,7 @@ const Register = () => {
     displayName: '',
     avatar: null
   });
+  const [success, setSuccess] = useState(false);
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
@@ -36,12 +36,8 @@ const Register = () => {
 
   const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      await dispatch(register(state)).unwrap();
-      navigate('/');
-    } catch (e) {
-      // error happened
-    }
+    await dispatch(register(state)).unwrap();
+    setSuccess(true);
   };
 
   const phoneNumberPattern = '^+996\\d{9}$';
@@ -145,6 +141,13 @@ const Register = () => {
             <FileInput onChange={fileInputChangeHandler} name="avatar" label="Выберите картинку профиля"
                        error={Boolean(getFieldError('avatar'))} helperText={getFieldError('avatar')}/>
           </Grid>
+          {success && (
+            <Grid item xs={12}>
+              <Alert severity="success" sx={{ mt: 1, maxWidth: '100%' }}>
+                На вашу почту было отправлено письмо для подтверждения!
+              </Alert>
+            </Grid>
+          )}
           <LoadingButton
             type="submit"
             fullWidth

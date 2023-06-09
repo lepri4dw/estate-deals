@@ -2,29 +2,62 @@ import express from "express";
 import mongoose from "mongoose";
 import {OAuth2Client} from "google-auth-library";
 import config from "../config";
-import crypto from "crypto";
 import * as fs from "fs";
 import fetch from 'node-fetch';
 import path from "path";
 import {imagesUpload} from "../multer";
 import User from "../models/User";
 import auth, {RequestWithUser} from "../middleware/auth";
+import nodemailer from 'nodemailer';
+import * as crypto from 'crypto';
+import {EMAIL_VERIFICATION} from "../constants";
 
 const usersRouter = express.Router();
 const client = new OAuth2Client(config.google.clientId);
 
+const sendEmail = async (email: string, subject: string, html: string) => {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: true,
+    auth: {
+      user: process.env.VERIFY_EMAIL_USER,
+      pass: process.env.VERIFY_EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: `"Estate Deals" <do-not-reply@estate-deals.kg>`,
+    to: email,
+    subject: subject,
+    html: html,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
 usersRouter.post('/', imagesUpload.single('avatar'), async (req, res, next) => {
   try {
+    const token = crypto.randomBytes(4).toString('hex');
     const user = new User({
       email: req.body.email,
       password: req.body.password,
       phoneNumber: req.body.phoneNumber,
       displayName: req.body.displayName,
       avatar: req.file ? req.file.filename : null,
+      verifyEmailToken: token,
     });
 
     user.generateToken();
     await user.save();
+
+    await sendEmail(
+      req.body.email,
+      'Подтверджение почты',
+     EMAIL_VERIFICATION(token, req.body.displayName),
+    )
+
     return res.send(user);
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
@@ -46,6 +79,20 @@ usersRouter.post('/sessions', async (req, res, next) => {
 
   if (!isMatch) {
     return res.status(400).send({error: 'Password is wrong'});
+  }
+
+  if (!user.verified) {
+    const token = crypto.randomBytes(4).toString('hex');
+    user.verifyEmailToken = token;
+    await user.save();
+    await sendEmail(
+      req.body.email,
+      'Подтверджение почты',
+      EMAIL_VERIFICATION(token, user.displayName),
+    );
+    return res.status(400).send({
+      error: 'Email не подтвержден, на вашу почту было выслано письмо!',
+    });
   }
 
   try {
@@ -93,7 +140,7 @@ usersRouter.post('/google', async (req, res, next) => {
       return res.status(400).send({error: 'Not enough user data'});
     }
 
-    let user = await User.findOne({googleId});
+    let user = await User.findOne({email});
 
     if (!user) {
       const displayName = payload["name"];
@@ -167,6 +214,30 @@ usersRouter.patch('/add-phone', auth, async (req, res, next) => {
       return res.status(400).send(e);
     }
 
+    return next(e);
+  }
+});
+
+usersRouter.post('/verify-email/:token', async (req, res, next) => {
+  try {
+    const user = await User.findOne({
+      verifyEmailToken: req.params.token,
+    });
+
+    if (!user) {
+      return res
+        .status(404)
+        .send({ error: 'Неверный токен, вам было выслано новое сообщение!' });
+    }
+
+    user.verified = true;
+    user.verifyEmailToken = null;
+    user.generateToken();
+    await user.save();
+    return res
+      .status(200)
+      .send({ message: 'Почта успешно подтверждена!', user });
+  } catch (e) {
     return next(e);
   }
 });
