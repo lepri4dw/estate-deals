@@ -69,7 +69,7 @@ const Profile = () => {
             </Grid>
           )) : <Alert severity="warning" style={{fontSize: '25px', width: '100%'}} iconMapping={{
             warning: <WarningAmberOutlinedIcon fontSize="large"/>
-          }}>У вас пока неи объявлений!</Alert>}
+          }}>У вас пока нет объявлений!</Alert>}
         </Grid>}
       </Grid>
     </Grid>

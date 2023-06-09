@@ -1,15 +1,19 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {EstateMutation} from "../../../types";
 import {useAppSelector} from "../../../app/hooks";
 import {selectEstateError, selectEstateSubmitting} from "../estatesSlice";
-import {Grid, MenuItem, TextField} from "@mui/material";
+import {Grid, IconButton, ImageList, ImageListItem, MenuItem, TextField} from "@mui/material";
 import {LoadingButton} from "@mui/lab";
+import DeleteIcon from '@mui/icons-material/Delete';
 import FileInput from "../../../components/UI/FileInput/FileInput";
+import {apiURL} from "../../../constants";
 
 interface Props {
   onSubmit: (estateMutation: EstateMutation) => void;
   existingEstate?: EstateMutation;
   isEdit?: boolean;
+  images?: string[];
+  onDelete?: (index: number) => void;
 }
 
 const initialState: EstateMutation = {
@@ -29,13 +33,18 @@ const initialState: EstateMutation = {
   estateType: '',
 }
 
-const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, isEdit = false}) => {
-  const error = useAppSelector(selectEstateError);
-  const loading = useAppSelector(selectEstateSubmitting);
-  const [state, setState] = useState<EstateMutation>(existingEstate);
+const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, isEdit = false, images, onDelete}) => {
+  const [state, setState] = useState(existingEstate);
+  console.log(existingEstate, state);
   const [currency, setCurrency] = useState('USD');
   const estateTypes = ['Квартира', 'Дом', 'Гараж', 'Участок', 'Коммерческое помещение'];
   const conditions = ['под самоотделку', 'хорошее', 'среднее', 'не достроено'];
+  const error = useAppSelector(selectEstateError);
+  const loading = useAppSelector(selectEstateSubmitting);
+
+  useEffect(() => {
+    setState(existingEstate || initialState);
+  }, [existingEstate]);
 
   const getFieldError = (fieldName: string) => {
     try {
@@ -292,13 +301,42 @@ const EstateForm: React.FC<Props> = ({onSubmit, existingEstate = initialState, i
 
         <Grid item xs>
           <FileInput
-            label="Выберите фотографии"
+            label={isEdit ? 'Добавить фотографии' : 'Выберите фотографии'}
             onChange={onFilesChange}
             name="images"
             error={Boolean(getFieldError('images'))}
             helperText={getFieldError('images')}
           />
         </Grid>
+
+        {isEdit && images && images.length > 1 && <Grid item xs>
+          <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
+            {images.map((img, index) => (
+              <ImageListItem key={img}>
+                <img
+                  src={`${apiURL}/${img}?w=164&h=164&fit=crop&auto=format`}
+                  srcSet={`${apiURL}/${img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                  alt={existingEstate?.address || ''}
+                  loading="lazy"
+                />
+                <IconButton
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    color: 'white',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  }}
+                  aria-label="Delete"
+                  onClick={() => onDelete!(index)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Grid>}
 
         <Grid item xs>
           <LoadingButton

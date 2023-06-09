@@ -101,7 +101,7 @@ estateRouter.post('/', auth, imagesUpload.array('images', 50), async (req, res, 
   }
 });
 
-estateRouter.put('/:id', auth, imagesUpload.array('images', 10), async (req, res, next) => {
+estateRouter.put('/:id', auth, imagesUpload.array('images', 50), async (req, res, next) => {
   try {
     const estate: HydratedDocument<IEstate> | null = await Estate.findById(req.params.id);
     const user = (req as RequestWithUser).user;
@@ -174,6 +174,31 @@ estateRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, re
     estate.isPublished = !estate.isPublished;
     await estate.save();
     return res.send({message: 'Обьявление было опубликовано!'});
+  } catch (e) {
+    return next(e);
+  }
+});
+
+estateRouter.patch('/remove-image/:id', auth, async (req, res, next) => {
+  try {
+    const estate: HydratedDocument<IEstate> | null = await Estate.findById(req.params.id);
+    const user = (req as RequestWithUser).user;
+    if (!estate) {
+      return res.sendStatus(404);
+    }
+
+    if (user.role !== 'admin' && !estate.user.equals(user._id)) {
+      return res.status(403).send({error: 'Вы не можете изменять не свое обьявление!'});
+    }
+
+    if (req.query.index) {
+      estate.images.splice(parseInt(req.query.index as string), 1);
+    } else {
+      estate.images = [];
+    }
+
+    await estate.save();
+    return res.send(estate);
   } catch (e) {
     return next(e);
   }

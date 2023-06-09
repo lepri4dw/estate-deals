@@ -25,7 +25,7 @@ function App() {
         <AppToolbar/>
       </header>
       <main>
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" sx={{pb: 5}}>
           <Routes>
             <Route path="/profile" element={<ProtectedRoute isAllowed={Boolean(user)}><Profile/></ProtectedRoute>}/>
             <Route path="/register" element={<Register/>}/>

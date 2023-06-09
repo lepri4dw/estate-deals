@@ -38,7 +38,7 @@ const FullEstateItem = () => {
   const handleDelete = async () => {
     if (window.confirm('Подтвердите удаление этого объявления')) {
       await dispatch(deleteEstate(id));
-      navigate('/'); // на личный кабинет
+      navigate('/profile');
     }
   };
 
@@ -85,7 +85,7 @@ const FullEstateItem = () => {
         </Grid>
        <Grid container spacing={2} item xs>
           <Grid item xs={6}>
-            <Typography variant="h3" mb={2}> {`${estate.numberOfRooms ? (estate.numberOfRooms + '-комн.') : ''} ${estate.estateType === 'Квартира' ? 'кв.' : estate.estateType}${estate.square ? (', ' + estate.square + `м${'\u00B2'}`) : ''} `}</Typography>
+            <Typography variant="h3" mb={2}> {`${estate.numberOfRooms ? (estate.numberOfRooms + '-комн.') : ''} ${estate.estateType === 'Квартира' ? 'кв.' : estate.estateType === 'Коммерческое помещение' ? 'комм. пом.'  : estate.estateType}${estate.square ? (', ' + estate.square + `м${'\u00B2'}`) : ''} `}</Typography>
             <Grid spacing={2} container mb={2}>
               <Grid item>
                 <Typography variant="h4">

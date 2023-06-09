@@ -92,8 +92,22 @@ export const deleteEstate = createAsyncThunk<void, string>(
 });
 
 export const estateTogglePublished = createAsyncThunk<void, string>(
-  'estate/toggleIsPublished',
+  'estates/toggleIsPublished',
   async (id) => {
     await axiosApi.patch(`/estates/${id}/togglePublished`);
   }
-)
+);
+
+interface RemoveImageParams {
+  estateId: string;
+  index: number;
+}
+
+export const removeImage = createAsyncThunk<void, RemoveImageParams>(
+  'estates/remove-image',
+  async ({estateId, index}) => {
+    await axiosApi.patch(`/estates/remove-image/${estateId}?index=${index}`);
+  }
+);
+
+

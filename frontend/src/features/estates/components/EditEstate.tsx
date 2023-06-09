@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {useNavigate, useParams} from "react-router-dom";
 import {EstateMutation} from "../../../types";
-import {fetchOneEstate, updateEstate} from "../estatesThunks";
+import {fetchOneEstate, removeImage, updateEstate} from "../estatesThunks";
 import {selectOneEstate} from "../estatesSlice";
 import {Container, Grid, Typography} from "@mui/material";
 import EstateForm from "./EstateForm";
@@ -22,6 +22,11 @@ const EditEstate = () => {
     navigate(`/estates/${id}`);
   };
 
+  const onDelete = async (index: number) => {
+    await dispatch(removeImage({estateId: id, index})).unwrap();
+    dispatch(fetchOneEstate(id));
+  }
+
   const existingEstate = estate && {
     usdPrice: estate.usdPrice.toString(),
     kgsPrice: estate.kgsPrice.toString(),
@@ -39,6 +44,7 @@ const EditEstate = () => {
     images: null,
   };
 
+  console.log(existingEstate)
   return (
     <Container maxWidth="md">
       <Grid container direction="column" spacing={2}>
@@ -46,7 +52,7 @@ const EditEstate = () => {
           <Typography variant="h4">Редактировать объявление</Typography>
         </Grid>
         <Grid item xs>
-          <EstateForm onSubmit={onSubmit} existingEstate={existingEstate || undefined} isEdit/>
+          <EstateForm onSubmit={onSubmit} existingEstate={existingEstate || undefined} isEdit images={estate?.images} onDelete={onDelete}/>
         </Grid>
       </Grid>
     </Container>

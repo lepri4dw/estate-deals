@@ -112,7 +112,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
           const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
           return regex.test(password);
         },
-        message: 'Пароль должен содержать как минимум 1 букву и 1 цифру.',
+        message: 'Пароль должен содержать как минимум 1 латинскую букву и 1 цифру.',
       },
     ],
   },

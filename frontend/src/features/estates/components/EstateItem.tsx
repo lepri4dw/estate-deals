@@ -36,7 +36,7 @@ const EstateItem: React.FC<Props> = ({estate}) => {
             </Grid>
           </Grid>
           <Typography variant="body1">
-            {`${estate.numberOfRooms ? (estate.numberOfRooms + '-комн.') : ''} ${estate.estateType === 'Квартира' ? 'кв.' : estate.estateType}${estate.square ? (', ' + estate.square + `м${'\u00B2'}`) : ''}`}
+            {`${estate.numberOfRooms ? (estate.numberOfRooms + '-комн.') : ''} ${estate.estateType === 'Квартира' ? 'кв.' : estate.estateType === 'Коммерческое помещение' ? 'комм. пом.' : estate.estateType}${estate.square ? (', ' + estate.square + `м${'\u00B2'}`) : ''}`}
           </Typography>
           <Typography variant="body2" >
             {estate.address}

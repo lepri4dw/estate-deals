@@ -16,7 +16,7 @@ const run = async () => {
     console.log('Collections were not present, skipping drop...');
   }
 
-  const [admin, user, user2, user3] = await User.create(
+  const [admin, user, user2] = await User.create(
     {
       email: 'admin1@gmail.com',
       displayName: 'Admin',
@@ -45,15 +45,6 @@ const run = async () => {
       avatar: null,
       verified: true,
     },
-    {
-      email: 'someuser2@gmail.com',
-      displayName: 'Tony',
-      password: 'useruser1',
-      token: crypto.randomUUID(),
-      phoneNumber: '+996550902646',
-      avatar: null,
-      verified: true,
-    },
   );
 
   await Estate.create({
@@ -74,7 +65,6 @@ const run = async () => {
         все коммуникации центральные.
         Зимои‌ жарко летом прохладно.`,
     dealType: 'sale',
-    isPublished: true,
     images: ['fixtures/appart-1.jpg','fixtures/appart-2.jpg','fixtures/appart-3.jpg','fixtures/appart-4.jpg','fixtures/appart-5.jpg', ]
   }, {
     user: user2._id,
@@ -92,6 +82,7 @@ const run = async () => {
       отопление паровое( газ, электричество), в шаговой доступности западный автовокзал, супермаркет,
       рестораны, кафе, школа , дет. сад..`,
     dealType: 'sale',
+    isPublished: true,
     images: ['fixtures/house-1.jpg', 'fixtures/house-2.jpg', 'fixtures/house-3.jpg', 'fixtures/house-4.jpg', ]
   }, {
     user: user2._id,
@@ -109,6 +100,56 @@ const run = async () => {
         Имеется вся бытовая техника: Утюг, Smart TV, стиральная машина, холодильник, микроволновая печь, пылесос.
         Из мебели: двухспальная кровать, 2 детской кровати, шкаф, кухонная гарнитура, диван, 2 гардероба.`,
     dealType: 'rent',
+    images: ['fixtures/appart2-1.jpg', 'fixtures/appart2-2.jpg', 'fixtures/appart2-3.jpg']
+  }, {
+    user: user._id,
+    usdPrice: 50000,
+    kgsPrice: 4700000,
+    floor: 2,
+    numberOfFloors: 11,
+    numberOfRooms: 2,
+    square: 60,
+    condition: 'хорошее',
+    town: 'Бишкек',
+    estateType: 'Квартира',
+    address: 'ул. Панфилова 70/8',
+    description: `В квартире выполнен ремонт из качественных материалов.
+        Новая мебель, бытовая техника, встроенные шкафы, кухонныи‌ гарнитур, хрустальные люстры, кондиционеры…
+        Дом сеи‌смоустои‌чивыи‌. и сдан в эксплуатацию,
+        все коммуникации центральные.
+        Зимои‌ жарко летом прохладно.`,
+    dealType: 'sale',
+    isPublished: true,
+    images: ['fixtures/appart-1.jpg','fixtures/appart-2.jpg','fixtures/appart-3.jpg','fixtures/appart-4.jpg','fixtures/appart-5.jpg', ]
+  }, {
+    user: user2._id,
+    usdPrice: 45000,
+    kgsPrice: 3900000,
+    landArea: 5,
+    town: 'Бишкек',
+    estateType: 'Участок',
+    address: 'ж/м Киргизия-1 ул. Абдрахманова 89',
+    description: `Участок`,
+    dealType: 'sale',
+    isPublished: true,
+    images: ['fixtures/house-1.jpg', 'fixtures/house-2.jpg', 'fixtures/house-3.jpg', 'fixtures/house-4.jpg', ]
+  }, {
+    user: user2._id,
+    usdPrice: 500,
+    kgsPrice: 43722,
+    floor: 9,
+    numberOfFloors: 20,
+    numberOfRooms: 2,
+    square: 45,
+    condition: 'хорошее',
+    town: 'Бишкек',
+    estateType: 'Квартира',
+    address: 'Тыныстанова/Ахунбаева 66 кв 7',
+    description: `Абсолютно новая квартира в новом доме, ранее не сдавалась.
+        Имеется вся бытовая техника: Утюг, Smart TV, стиральная машина, холодильник, микроволновая печь, пылесос.
+        Из мебели: двухспальная кровать, 2 детской кровати, шкаф, кухонная гарнитура, диван, 2 гардероба.`,
+    dealType: 'rent',
+    isPublished: true,
     images: ['fixtures/appart2-1.jpg', 'fixtures/appart2-2.jpg', 'fixtures/appart2-3.jpg']
   }, );
 
