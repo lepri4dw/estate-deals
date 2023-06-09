@@ -1,33 +1,46 @@
 import React, {useState} from 'react';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {LoginMutation} from '../../types';
-import {Alert, Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/material';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Container,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Link,
+  TextField,
+  Typography
+} from '@mui/material';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {selectLoginError, selectLoginLoading} from './usersSlice';
 import {googleLogin, login} from './usersThunks';
 import {LoadingButton} from "@mui/lab";
 import {GoogleLogin} from "@react-oauth/google";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const error = useAppSelector(selectLoginError);
   const navigate = useNavigate();
   const loading = useAppSelector(selectLoginLoading);
-
   const [state, setState] = useState<LoginMutation>({
     email: '',
     password: '',
   });
-
-  const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = event.target;
-    setState(prevState => ({...prevState, [name]: value}));
-  };
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const googleLoginHandler = async (credential: string) => {
     await dispatch(googleLogin(credential)).unwrap();
     navigate('/');
+  };
+
+  const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = event.target;
+    setState(prevState => ({...prevState, [name]: value}));
   };
 
   const submitFormHandler = async (event: React.FormEvent) => {
@@ -84,10 +97,25 @@ const Login = () => {
               <TextField
                 label="Пароль"
                 name="password"
-                type="password" required
+                required
                 autoComplete="current-password"
                 value={state.password}
                 onChange={inputChangeHandler}
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                inputProps={{ minLength: 8 }}
               />
             </Grid>
           </Grid>

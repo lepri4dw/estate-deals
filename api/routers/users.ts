@@ -72,13 +72,13 @@ usersRouter.post('/sessions', async (req, res, next) => {
   const user = await User.findOne({email: req.body.email});
 
   if (!user) {
-    return res.status(400).send({error: 'Username not found'});
+    return res.status(400).send({error: 'Email не найден!'});
   }
 
   const isMatch = await user.checkPassword(req.body.password);
 
   if (!isMatch) {
-    return res.status(400).send({error: 'Password is wrong'});
+    return res.status(400).send({error: 'Неверный email и/или пароль'});
   }
 
   if (!user.verified) {

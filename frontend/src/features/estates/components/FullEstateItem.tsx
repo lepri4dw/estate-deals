@@ -9,7 +9,7 @@ import {
 } from "../estatesSlice";
 import {deleteEstate, estateTogglePublished, fetchOneEstate} from "../estatesThunks";
 import {selectUser} from "../../users/usersSlice";
-import {Avatar, Button, Card, CircularProgress, Container, Grid, Typography} from "@mui/material";
+import {Avatar, Button, Card, Chip, CircularProgress, Container, Grid, Typography} from "@mui/material";
 import Carousel from 'react-material-ui-carousel';
 import {apiURL} from "../../../constants";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -54,8 +54,13 @@ const FullEstateItem = () => {
   return (
     <Container maxWidth="md">
       {loading ? <CircularProgress/> : estate && <Grid mt={3} container spacing={3} direction="column">
-        <Grid item>
-          <Typography variant="h6" color="text.secondary">Опубликовано {dayjs(estate.createdAt).format('DD.MM.YYYY')}</Typography>
+        <Grid item container>
+          <Grid item xs>
+            <Typography variant="h6" color="text.secondary">Опубликовано {dayjs(estate.createdAt).format('DD.MM.YYYY')}</Typography>
+          </Grid>
+          {!estate.isPublished && <Grid item xs container>
+            <Chip label="на модерации" color="warning" style={{fontSize: '25px', padding: '8px', marginLeft: 'auto'}}/>
+          </Grid>}
         </Grid>
         <Grid item xs>
           <Card style={{ width: '100%', padding: '16px' }}>

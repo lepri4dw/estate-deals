@@ -45,7 +45,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem component={Link} to="/new-estate">Разместить объявление</MenuItem>
+        {user.phoneNumber && <MenuItem component={Link} to="/new-estate">Разместить объявление</MenuItem>}
         <MenuItem component={Link} to="/profile">Мой профиль</MenuItem>
         <MenuItem onClick={handleLogout} disabled={logoutLoading}>{logoutLoading && <CircularProgress size={20} sx={{mr: 1}}/>}Выйти</MenuItem>
       </Menu>

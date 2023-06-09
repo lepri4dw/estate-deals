@@ -1,7 +1,18 @@
 import React, {useState} from 'react';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {RegisterMutation} from '../../types';
-import {Alert, Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/material';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Container,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Link,
+  TextField,
+  Typography
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {selectRegisterError, selectRegisterLoading} from './usersSlice';
@@ -9,6 +20,7 @@ import {googleLogin, register} from './usersThunks';
 import {LoadingButton} from "@mui/lab";
 import FileInput from "../../components/UI/FileInput/FileInput";
 import {GoogleLogin} from "@react-oauth/google";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +35,8 @@ const Register = () => {
     avatar: null
   });
   const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
@@ -126,14 +140,31 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                required
+                variant="outlined"
                 name="password"
                 label="Пароль"
-                type="password"
                 autoComplete="new-password"
-                value={state.password} required
+                value={state.password}
                 onChange={inputChangeHandler}
                 error={Boolean(getFieldError('password'))}
                 helperText={getFieldError('password')}
+                sx={{ width: '100%' }}
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                inputProps={{ minLength: 8 }}
               />
             </Grid>
           </Grid>

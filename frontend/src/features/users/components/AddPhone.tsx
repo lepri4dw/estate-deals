@@ -47,7 +47,7 @@ const AddPhone = () => {
         </Avatar>
 
         <Typography variant="h5" textAlign="center">
-          Для создания объявления предоставьте свой номер телефона
+          Для создания объявления добавьте свой номер телефона
         </Typography>
         <Box
           component="form"

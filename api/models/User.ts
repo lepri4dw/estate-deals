@@ -85,6 +85,36 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
   password: {
     type: String,
     required: true,
+    validate: [
+      {
+        validator: function (password: string): boolean {
+          if (!password) {
+            return true;
+          }
+
+          return password.length >= 8;
+        },
+        message: 'Пароль должен содержать не менее 8 символов.',
+      },
+      {
+        validator: function (
+          this: HydratedDocument<IUser>,
+          password: string,
+        ): boolean {
+          if (!this.isModified('password') || this.googleId) {
+            return true;
+          }
+
+          if (!password) {
+            return true;
+          }
+
+          const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+          return regex.test(password);
+        },
+        message: 'Пароль должен содержать как минимум 1 букву и 1 цифру.',
+      },
+    ],
   },
   token: {
     type: String,

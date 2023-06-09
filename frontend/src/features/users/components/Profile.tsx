@@ -23,25 +23,34 @@ const Profile = () => {
   return (
     <Grid container spacing={2} direction="column">
       <Grid container spacing={2} item>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <img
             src={user?.avatar ? `${apiURL}/${user.avatar}` : userIcon}
             alt={user?.displayName || 'User icon'}
             width={200}
           />
         </Grid>
-        <Grid item xs={9} mt={5}>
-          <Typography variant="h6">
-            <b>Имя:</b> {user?.displayName}
-          </Typography>
+        <Grid item xs={10} mt={2} container direction="column" spacing={1}>
+          <Grid item xs>
+            <Typography variant="h5">
+              <b>Имя:</b> {user?.displayName}
+            </Typography>
+          </Grid>
+          <Grid item xs>
+            <Typography variant="h5">
+              <b>Email:</b> {user?.email}
+            </Typography>
 
-          <Typography variant="h6">
-            <b>Email:</b> {user?.email}
-          </Typography>
-
-          <Typography variant="h6">
-            <b>Телефон:</b> {user?.phoneNumber}
-          </Typography>
+          </Grid>
+          <Grid item xs>
+            <Typography variant="h5">
+              <b>Телефон:</b> {user?.phoneNumber ? user.phoneNumber :
+              <Button variant="contained" sx={{ml: 2}} component={Link} to="/add-phone">Добавить</Button>}
+            </Typography>
+            {!user?.phoneNumber && <Typography variant="h6" color="text.secondary">
+              Для того что-бы разместить объявление, добавьте номер телефона
+            </Typography>}
+          </Grid>
         </Grid>
       </Grid>
       <Grid item>
@@ -49,9 +58,9 @@ const Profile = () => {
           <Grid item>
             <Typography variant="h4" mb={3}>Мои объявления: </Typography>
           </Grid>
-          <Grid item>
+          {user?.phoneNumber && <Grid item>
             <Button component={Link} to="/new-estate" variant="contained">Создать</Button>
-          </Grid>
+          </Grid>}
         </Grid>
         {loading ? <CircularProgress/> : <Grid container spacing={2}>
           {estates.length > 0 ? estates.map(estate => (

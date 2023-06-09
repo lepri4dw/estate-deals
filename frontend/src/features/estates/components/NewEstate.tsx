@@ -20,7 +20,7 @@ const NewEstate = () => {
 
   const onSubmit = async (estateMutation: EstateMutation) => {
     await dispatch(createEstate(estateMutation)).unwrap();
-    navigate('/');
+    navigate('/profile');
   };
 
   return (
